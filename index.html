@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>相册</title>
+  <!-- 标签图标 -->
+  <link rel="icon" type="image/png" sizes="32x32" href="./images/icon/rose.png">
+  <!-- 移动端兼容 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- SEO -->
+  <meta name="keywords" content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive"/>
+  <!-- 基础样式 -->
+  <link rel="stylesheet" href="./css/base.css">
+  <!-- Flex 布局 -->
+  <link rel="stylesheet" href="./css/flex.css">
+  <!-- 字体图标 -->
+  <link rel="stylesheet" href="./css/icon.css">
+  <!-- 页面样式 -->
+  <style>
+    .container {
+      width: 100%;
+      padding: 50px 0;
+    }
+    .img-item + .img-item {
+      margin-top: 30px;
+    }
+    .img-item {
+    }
+    .img-box {
+      width: 1027px;
+      height: 685px;
+      margin: 0 auto 30px;
+      box-shadow: 0 16px 30px 0, 0 6px 12px 0 rgba(0, 0, 0, .1);
+      border-radius: 2px;
+      overflow-y: hidden;
+      background-image: linear-gradient(135deg, #FEB692 10%, #EA5455 100%);
+      transition: -webkit-box-shadow 1s;
+      transition: box-shadow 1s;
+      transition: box-shadow 1s, -webkit-box-shadow 1s;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 100% 100%;
+    }
+    .desc-item + .desc-item {
+      margin-left: 40px;
+    }
+    .desc-item__name {
+      margin-bottom: 6px;
+      font-size: 12px;
+      text-align: center;
+      text-transform: uppercase;
+      color: #9b9b9b;
+      margin-bottom: 6px;
+    }
+    .desc-item__desc {
+      text-decoration: none;
+      color: #505050;
+      font-size: 14px;
+    }
+    .param-item + .param-item {
+      margin-left: 12px;
+    }
+    .param-item .iconfont {
+      font-size: 14px;
+    }
+    .param__value {
+      vertical-align: middle;
+      padding-left: 5px;
+      font-size: 12px;
+      color: #505050;
+    }
+    .icon_star {
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+<!-- 页面结构 -->
+<div class="container flex-column flex-items-center">
+  <section class="img-item flex-column flex-all-center">
+    <div class="img-box"
+         style="background-image: url('https://graphbed.qiniu.songxingguo.com/album/img_1.jpeg');"></div>
+    <ul class="flex-row flex-items-center pt20 ml20 mr20">
+      <li class="desc-item flex-column flex-items-center">
+        <span class="desc-item__name">评级</span>
+        <ul class="flex-row flex-items-center">
+          <li><i class="iconfont icon_star"></i></li>
+          <li><i class="iconfont icon_star"></i></li>
+        </ul>
+      </li>
+      <li class="desc-item flex-column flex-items-center">
+        <span class="desc-item__name">地点</span>
+        <a class="desc-item__desc" href="javascript:;">
+          上海 · 奉贤
+        </a>
+      </li>
+      <li class="desc-item flex-column flex-items-center">
+        <span class="desc-item__name">参数</span>
+        <ul class="flex-row flex-items-center">
+          <li class="param-item flex-row flex-items-center">
+            <i class="iconfont icon_aperture"></i>
+            <span class="param__value">f/4.5</span>
+          </li>
+          <li class="param-item flex-row flex-items-center">
+            <i class="iconfont icon_iso"></i>
+            <span class="param__value">400</span>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </section>
+  <section class="img-item flex-column flex-all-center">
+    <div class="img-box"
+         style="background-image: url('https://graphbed.qiniu.songxingguo.com/album/img_2.jpeg');"></div>
+    <ul class="flex-row flex-items-center pt20 ml20 mr20">
+      <li class="desc-item flex-column flex-items-center">
+        <span class="desc-item__name">评级</span>
+        <ul class="flex-row flex-items-center">
+          <li><i class="iconfont icon_star"></i></li>
+          <li><i class="iconfont icon_star"></i></li>
+        </ul>
+      </li>
+      <li class="desc-item flex-column flex-items-center">
+        <span class="desc-item__name">地点</span>
+        <a class="desc-item__desc" href="javascript:;">
+          上海 · 奉贤
+        </a>
+      </li>
+      <li class="desc-item flex-column flex-items-center">
+        <span class="desc-item__name">参数</span>
+        <ul class="flex-row flex-items-center">
+          <li class="param-item flex-row flex-items-center">
+            <i class="iconfont icon_aperture"></i>
+            <span class="param__value">f/4.5</span>
+          </li>
+          <li class="param-item flex-row flex-items-center">
+            <i class="iconfont icon_iso"></i>
+            <span class="param__value">400</span>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </section>
+  <section class="img-item flex-column flex-all-center">
+    <div class="img-box"
+         style="background-image: url('https://graphbed.qiniu.songxingguo.com/album/img_3.JPG');"></div>
+    <ul class="flex-row flex-items-center pt20 ml20 mr20">
+      <li class="desc-item flex-column flex-items-center">
+        <span class="desc-item__name">评级</span>
+        <ul class="flex-row flex-items-center">
+          <li><i class="iconfont icon_star"></i></li>
+          <li><i class="iconfont icon_star"></i></li>
+        </ul>
+      </li>
+      <li class="desc-item flex-column flex-items-center">
+        <span class="desc-item__name">地点</span>
+        <a class="desc-item__desc" href="javascript:;">
+          上海 · 外滩
+        </a>
+      </li>
+      <li class="desc-item flex-column flex-items-center">
+        <span class="desc-item__name">参数</span>
+        <ul class="flex-row flex-items-center">
+          <li class="param-item flex-row flex-items-center">
+            <i class="iconfont icon_aperture"></i>
+            <span class="param__value">f/1.8</span>
+          </li>
+          <li class="param-item flex-row flex-items-center">
+            <i class="iconfont icon_iso"></i>
+            <span class="param__value">400</span>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </section>
+</div>
+<!-- 引入 jQuery -->
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<!-- 页面逻辑 -->
+<srcipt>
+
+</srcipt>
+</body>
+</html>
