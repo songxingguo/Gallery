@@ -79,109 +79,60 @@
 </head>
 <body>
 <!-- 页面结构 -->
-<div class="container flex-column flex-items-center">
-  <section class="img-item flex-column flex-all-center">
-    <div class="img-box"
-         style="background-image: url('https://graphbed.qiniu.songxingguo.com/album/img_1.jpeg');"></div>
-    <ul class="flex-row flex-items-center pt20 ml20 mr20">
-      <li class="desc-item flex-column flex-items-center">
-        <span class="desc-item__name">评级</span>
-        <ul class="flex-row flex-items-center">
-          <li><i class="iconfont icon_star"></i></li>
-          <li><i class="iconfont icon_star"></i></li>
-        </ul>
-      </li>
-      <li class="desc-item flex-column flex-items-center">
-        <span class="desc-item__name">地点</span>
-        <a class="desc-item__desc" href="javascript:;">
-          上海 · 奉贤
-        </a>
-      </li>
-      <li class="desc-item flex-column flex-items-center">
-        <span class="desc-item__name">参数</span>
-        <ul class="flex-row flex-items-center">
-          <li class="param-item flex-row flex-items-center">
-            <i class="iconfont icon_aperture"></i>
-            <span class="param__value">f/4.5</span>
-          </li>
-          <li class="param-item flex-row flex-items-center">
-            <i class="iconfont icon_iso"></i>
-            <span class="param__value">400</span>
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </section>
-  <section class="img-item flex-column flex-all-center">
-    <div class="img-box"
-         style="background-image: url('https://graphbed.qiniu.songxingguo.com/album/img_2.jpeg');"></div>
-    <ul class="flex-row flex-items-center pt20 ml20 mr20">
-      <li class="desc-item flex-column flex-items-center">
-        <span class="desc-item__name">评级</span>
-        <ul class="flex-row flex-items-center">
-          <li><i class="iconfont icon_star"></i></li>
-          <li><i class="iconfont icon_star"></i></li>
-        </ul>
-      </li>
-      <li class="desc-item flex-column flex-items-center">
-        <span class="desc-item__name">地点</span>
-        <a class="desc-item__desc" href="javascript:;">
-          上海 · 奉贤
-        </a>
-      </li>
-      <li class="desc-item flex-column flex-items-center">
-        <span class="desc-item__name">参数</span>
-        <ul class="flex-row flex-items-center">
-          <li class="param-item flex-row flex-items-center">
-            <i class="iconfont icon_aperture"></i>
-            <span class="param__value">f/4.5</span>
-          </li>
-          <li class="param-item flex-row flex-items-center">
-            <i class="iconfont icon_iso"></i>
-            <span class="param__value">400</span>
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </section>
-  <section class="img-item flex-column flex-all-center">
-    <div class="img-box"
-         style="background-image: url('https://graphbed.qiniu.songxingguo.com/album/img_3.JPG');"></div>
-    <ul class="flex-row flex-items-center pt20 ml20 mr20">
-      <li class="desc-item flex-column flex-items-center">
-        <span class="desc-item__name">评级</span>
-        <ul class="flex-row flex-items-center">
-          <li><i class="iconfont icon_star"></i></li>
-          <li><i class="iconfont icon_star"></i></li>
-        </ul>
-      </li>
-      <li class="desc-item flex-column flex-items-center">
-        <span class="desc-item__name">地点</span>
-        <a class="desc-item__desc" href="javascript:;">
-          上海 · 外滩
-        </a>
-      </li>
-      <li class="desc-item flex-column flex-items-center">
-        <span class="desc-item__name">参数</span>
-        <ul class="flex-row flex-items-center">
-          <li class="param-item flex-row flex-items-center">
-            <i class="iconfont icon_aperture"></i>
-            <span class="param__value">f/1.8</span>
-          </li>
-          <li class="param-item flex-row flex-items-center">
-            <i class="iconfont icon_iso"></i>
-            <span class="param__value">400</span>
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </section>
-</div>
+<div id='main' class="container flex-column flex-items-center"></div>
 <!-- 引入 jQuery -->
 <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
 <!-- 页面逻辑 -->
-<srcipt>
-
-</srcipt>
+<script>
+  (async () => {
+    for (let i = 1; i < 4; i++) {
+      const imgUrl = `https://graphbed.qiniu.songxingguo.com/album/img_${i}.jpeg`
+      $.ajax(imgUrl, {
+        type: 'get',
+        timeout: 1000,
+        success: () => {
+          const imgDesc = '12 月 28 日，摩天轮🎡，晴'
+          const cId = $('#main')
+          const imgItem = `<section class="img-item flex-column flex-all-center">
+    <div class="img-box"
+         style="background-image: url(${imgUrl});"></div>
+    <ul class="flex-row flex-items-center pt20 ml20 mr20">
+      <li class="desc-item flex-column flex-items-center">
+        <span class="desc-item__name">评级</span>
+        <ul class="flex-row flex-items-center">
+          <li><i class="iconfont icon_star"></i></li>
+          <li><i class="iconfont icon_star"></i></li>
+        </ul>
+      </li>
+      <li class="desc-item flex-column flex-items-center">
+        <span class="desc-item__name">地点</span>
+        <a class="desc-item__desc" href="javascript:;">
+          上海 · 奉贤
+        </a>
+      </li>
+      <li class="desc-item flex-column flex-items-center">
+        <span class="desc-item__name">参数</span>
+        <ul class="flex-row flex-items-center">
+          <li class="param-item flex-row flex-items-center">
+            <i class="iconfont icon_aperture"></i>
+            <span class="param__value">f/4.5</span>
+          </li>
+          <li class="param-item flex-row flex-items-center">
+            <i class="iconfont icon_iso"></i>
+            <span class="param__value">400</span>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </section>`
+          cId.append(imgItem)
+        },
+        error: () => {
+          console.log("请求失败")
+        }
+      })
+    }
+  })()
+</script>
 </body>
 </html>
