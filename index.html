@@ -87,30 +87,43 @@
 <!-- 页面逻辑 -->
 <script>
   (async () => {
-    for (let i = 1; i < 4; i++) {
-      const imgUrl = `https://graphbed.qiniu.songxingguo.com/album/img_${i}.jpeg`
-      const exifUrl = `https://graphbed.qiniu.songxingguo.com/album/img_3.JPG?exif`
-      $.ajax(exifUrl, {
-        type: 'get',
-        timeout: 1000,
-        success: (data) => {
-          const {
-            DateTime: {val: dateTime}, // 拍摄时间
-            ExposureBiasValue: {val: EV}, // 曝光补偿
-            ExposureTime: {val: exposureTime}, // 快门时间
-            FNumber: {val: fNumber}, // 光圈大小
-            FocalLength: {val: focalLength}, // 焦距
-            Model: {val: model}, // 机型
-            ISOSpeedRatings: {val: ISO}, // ISO
-            Copyright: {val: Copyright}, // 版权
-          } = data
-          $.ajax(imgUrl, {
-            type: 'get',
-            timeout: 1000,
-            success: () => {
-              const imgDesc = '12 月 28 日，摩天轮🎡，晴'
-              const cId = $('#main')
-              const imgItem = `<section class="img-item flex-column flex-all-center">
+    for (let i = 1; i < 200; i++) {
+      const imgUrl = `https://graphbed.qiniu.songxingguo.com/album/img_${i}.JPG`
+      const exifUrl = `https://graphbed.qiniu.songxingguo.com/album/img_${i}.JPG?exif`
+      const {dateTime, exposureTime, fNumber, focalLength, model, ISO} = await new Promise((resolve) => {
+        $.ajax(exifUrl, {
+          type: 'get',
+          timeout: 1000,
+          success: (data) => {
+            const {
+              DateTime: {val: dateTime}, // 拍摄时间
+              ExposureTime: {val: exposureTime}, // 快门时间
+              FNumber: {val: fNumber}, // 光圈大小
+              FocalLength: {val: focalLength}, // 焦距
+              Model: {val: model}, // 机型
+              ISOSpeedRatings: {val: ISO}, // ISO
+            } = data
+            resolve({dateTime, exposureTime, fNumber, focalLength, model, ISO})
+          },
+          error: () => {
+            console.log("请求失败")
+          }
+        })
+      })
+      await new Promise((resolve => {
+        $.ajax(imgUrl, {
+          type: 'get',
+          timeout: 1000,
+          success: () => {
+            resolve()
+          },
+          error: () => {
+            console.log("请求失败")
+          }
+        })
+      }))
+      const cId = $('#main')
+      const imgItem = `<section class="img-item flex-column flex-all-center">
     <div class="img-box"
          style="background-image: url(${imgUrl});"></div>
     <ul class="flex-row flex-items-center pt20 ml20 mr20">
@@ -162,17 +175,7 @@
       </li>
     </ul>
   </section>`
-              cId.append(imgItem)
-            },
-            error: () => {
-              console.log("请求失败")
-            }
-          })
-        },
-        error: () => {
-          console.log("请求失败")
-        }
-      })
+      cId.append(imgItem)
     }
   })()
 </script>
