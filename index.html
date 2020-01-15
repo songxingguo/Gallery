@@ -97,8 +97,13 @@
       })
     })
     for (let i = 0; i < keys.length; i++) {
-      const imgUrl = `https://graphbed.qiniu.songxingguo.com/${keys[i]}`
-      const exifUrl = `https://graphbed.qiniu.songxingguo.com/${keys[i]}?exif`
+      const key = keys[i]
+      console.log(key)
+      const nameStr = key.replace('album/', '').replace('.JPG', '')
+      const [country = '', province = '', city = '', grade] = nameStr.split('-')
+      const imgUrl = `https://graphbed.qiniu.songxingguo.com/${key}`
+      const exifUrl = `https://graphbed.qiniu.songxingguo.com/${key}?exif`
+      console.log(imgUrl, country, province)
       // 获取图片信息
       const {dateTime, exposureTime, fNumber, focalLength, model, ISO} = await new Promise((resolve) => {
         $.ajax(exifUrl, {
@@ -132,6 +137,14 @@
           }
         })
       }))
+      // 位置信息
+      const position = `${country}·${province}·${city}`
+      // 生成评级
+      let startList = ``
+      for (let i = 1; i <= 7; i++) {
+        const stared = i <= grade
+        startList += `<li><i class="iconfont ${stared ? 'icon_stared' : 'icon_star'}"></i></li>`
+      }
       const cId = $('#main')
       const imgItem = `<section class="img-item flex-column flex-all-center">
     <div class="img-box"
@@ -140,8 +153,7 @@
       <li class="desc-item flex-column flex-items-center">
         <span class="desc-item__name">评级</span>
         <ul class="flex-row flex-items-center">
-          <li><i class="iconfont icon_star"></i></li>
-          <li><i class="iconfont icon_star"></i></li>
+          ${startList}
         </ul>
       </li>
       <li class="desc-item flex-column flex-items-center">
@@ -168,7 +180,7 @@
       <li class="desc-item flex-column flex-items-center">
         <span class="desc-item__name">地点</span>
         <a class="desc-item__desc" href="javascript:;">
-          上海 · 奉贤
+          ${position}
         </a>
       </li>
       <li class="desc-item flex-column flex-items-center">
