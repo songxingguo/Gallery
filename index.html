@@ -87,9 +87,19 @@
 <!-- 页面逻辑 -->
 <script>
   (async () => {
-    for (let i = 1; i < 200; i++) {
-      const imgUrl = `https://graphbed.qiniu.songxingguo.com/album/img_${i}.JPG`
-      const exifUrl = `https://graphbed.qiniu.songxingguo.com/album/img_${i}.JPG?exif`
+    const getKeysUrl = `https://album.songxingguo.workers.dev`
+    const keys = await new Promise((resolve) => {
+      $.ajax(getKeysUrl, {
+        type: 'get',
+        success: (data) => {
+          resolve(data)
+        }
+      })
+    })
+    for (let i = 0; i < keys.length; i++) {
+      const imgUrl = `https://graphbed.qiniu.songxingguo.com/${keys[i]}`
+      const exifUrl = `https://graphbed.qiniu.songxingguo.com/${keys[i]}?exif`
+      // 获取图片信息
       const {dateTime, exposureTime, fNumber, focalLength, model, ISO} = await new Promise((resolve) => {
         $.ajax(exifUrl, {
           type: 'get',
