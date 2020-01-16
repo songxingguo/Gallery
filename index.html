@@ -125,12 +125,10 @@
     })
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i]
-      console.log(key)
       const nameStr = key.replace('album/', '').replace('.JPG', '')
       const [country = '', province = '', city = '', grade] = nameStr.split('-')
       const imgUrl = `https://graphbed.qiniu.songxingguo.com/${key}`
       const exifUrl = `https://graphbed.qiniu.songxingguo.com/${key}?exif`
-      console.log(imgUrl, country, province)
       // 获取图片信息
       const {dateTime, exposureTime, fNumber, focalLength, model, ISO} = await new Promise((resolve) => {
         $.ajax(exifUrl, {
@@ -187,16 +185,16 @@
         <span class="desc-item__name">参数</span>
         <ul class="flex-row flex-items-center">
           <li class="param-item flex-row flex-items-center">
-            <i class="iconfont icon_aperture"></i>
+            <i class="iconfont icon_focus"></i>
             <span class="param__value">${parseInt(focalLength)}mm</span>
           </li>
           <li class="param-item flex-row flex-items-center">
             <i class="iconfont icon_aperture"></i>
-            <span class="param__value">${exposureTime.replace(' sec.', '')}</span>
+            <span class="param__value">f/${parseFloat(fNumber.split("/")[1])}</span>
           </li>
           <li class="param-item flex-row flex-items-center">
-            <i class="iconfont icon_aperture"></i>
-            <span class="param__value">${fNumber}</span>
+            <i class="iconfont icon_time"></i>
+            <span class="param__value">${exposureTime.replace(' sec.', '')}</span>
           </li>
           <li class="param-item flex-row flex-items-center">
             <i class="iconfont icon_iso"></i>
