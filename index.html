@@ -30,8 +30,8 @@
     .img-item {
     }
     .img-box {
-      width: 1027px;
-      height: 685px;
+      width: 70vw;
+      height: calc(70vw / 3 * 2);
       margin: 0 auto 30px;
       box-shadow: 0 16px 30px 0, 0 6px 12px 0 rgba(0, 0, 0, .1);
       border-radius: 2px;
@@ -43,6 +43,10 @@
       background-repeat: no-repeat;
       background-position: center;
       background-size: 100% 100%;
+    }
+    .desc-box {
+      padding-top: 20px;
+      margin: 0 20px;
     }
     .desc-item + .desc-item {
       margin-left: 40px;
@@ -74,6 +78,29 @@
     }
     .icon_star {
       font-size: 18px;
+    }
+    @media screen and (max-width: 750px) {
+      
+      .img-box {
+        width: 100vw;
+        height: calc(100vw / 3 * 2);
+        margin: 0;
+      }
+      
+      .desc-box {
+        width: 100vw;
+        padding-top: 40px;
+        margin: 0;
+        overflow: auto;
+      }
+      
+      .desc-item {
+        min-width: 200px;
+      }
+      
+      .desc-item + .desc-item {
+        margin: 0;
+      }
     }
   </style>
 </head>
@@ -149,7 +176,7 @@
       const imgItem = `<section class="img-item flex-column flex-all-center">
     <div class="img-box"
          style="background-image: url(${imgUrl});"></div>
-    <ul class="flex-row flex-items-center pt20 ml20 mr20">
+    <ul class="desc-box flex-row flex-content-between">
       <li class="desc-item flex-column flex-items-center">
         <span class="desc-item__name">评级</span>
         <ul class="flex-row flex-items-center">
@@ -161,7 +188,7 @@
         <ul class="flex-row flex-items-center">
           <li class="param-item flex-row flex-items-center">
             <i class="iconfont icon_aperture"></i>
-            <span class="param__value">${focalLength}</span>
+            <span class="param__value">${parseInt(focalLength)}mm</span>
           </li>
           <li class="param-item flex-row flex-items-center">
             <i class="iconfont icon_aperture"></i>
