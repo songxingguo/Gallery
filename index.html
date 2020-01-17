@@ -150,18 +150,6 @@
           }
         })
       })
-      await new Promise((resolve => {
-        $.ajax(imgUrl, {
-          type: 'get',
-          timeout: 1000,
-          success: () => {
-            resolve()
-          },
-          error: () => {
-            console.log("请求失败")
-          }
-        })
-      }))
       // 位置信息
       const position = `${country}·${province}·${city}`
       // 生成评级
