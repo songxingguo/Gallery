@@ -125,27 +125,14 @@
 <!-- 页面逻辑 -->
 <script>
   (async () => {
-    const getKeysUrl = `https://album.songxingguo.workers.dev`
-    const keys = await new Promise((resolve) => {
-      $.ajax(getKeysUrl, {
+    const imgUrl = `https://net.songxingguo.workers.dev/album/imgs`
+    // 获取图片信息
+    const imgs = await new Promise((resolve) => {
+      $.ajax(imgUrl, {
         type: 'get',
+        timeout: 10000,
         success: (data) => {
-          resolve(data)
-        }
-      })
-    })
-    for (let i = 0; i < keys.length; i++) {
-      const key = keys[i]
-      const nameStr = key.replace('album/', '').replace('.JPG', '')
-      const [country = '', province = '', city = '', grade] = nameStr.split('-')
-      const imgUrl = `https://graphbed.qiniu.songxingguo.com/${key}`
-      const exifUrl = `https://graphbed.qiniu.songxingguo.com/${key}?exif`
-      // 获取图片信息
-      const {dateTime, exposureTime, fNumber, focalLength, model, ISO} = await new Promise((resolve) => {
-        $.ajax(exifUrl, {
-          type: 'get',
-          timeout: 1000,
-          success: (data) => {
+          const imgs = data.map(item => {
             const {
               DateTime: {val: dateTime}, // 拍摄时间
               ExposureTime: {val: exposureTime}, // 快门时间
@@ -153,16 +140,28 @@
               FocalLength: {val: focalLength}, // 焦距
               Model: {val: model}, // 机型
               ISOSpeedRatings: {val: ISO}, // ISO
-            } = data
-            resolve({dateTime, exposureTime, fNumber, focalLength, model, ISO})
-          },
-          error: () => {
-            console.log("请求失败")
-          }
-        })
+            } = item
+            return {
+              dateTime,
+              exposureTime,
+              fNumber,
+              focalLength,
+              model,
+              ISO,
+              ...item
+            }
+          })
+          resolve(imgs)
+        },
+        error: () => {
+          console.log("请求失败")
+        }
       })
+    })
+    imgs.forEach(item => {
+      const {url, dateTime, exposureTime, fNumber, focalLength, model, ISO, address, grade} = item
       // 位置信息
-      const position = `${country}·${province}·${city}`
+      const position = address.replace(/-/g, '·')
       // 生成评级
       let startList = ``
       for (let i = 1; i <= 7; i++) {
@@ -172,7 +171,7 @@
       const cId = $('#main')
       const imgItem = `<section class="img-item flex-column flex-all-center">
     <div class="img-box"
-         style="background-image: url(${imgUrl});"></div>
+         style="background-image: url(${url});"></div>
     <ul class="desc-box flex-row flex-content-between">
       <li class="desc-item flex-column flex-items-center">
         <span class="desc-item__name">评级</span>
@@ -222,7 +221,7 @@
     </ul>
   </section>`
       cId.append(imgItem)
-    }
+    })
   })()
 </script>
 </body>
