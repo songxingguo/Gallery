@@ -38,7 +38,7 @@
       box-shadow: 0 16px 30px 0, 0 6px 12px 0 rgba(0, 0, 0, .1);
       border-radius: 2px;
       overflow-y: hidden;
-      background-image: linear-gradient(135deg, #FEB692 10%, #EA5455 100%);
+      background-image: linear-gradient(135deg, #A0FE65 10%, #FA016D 100%);
       transition: -webkit-box-shadow 1s;
       transition: box-shadow 1s;
       transition: box-shadow 1s, -webkit-box-shadow 1s;
@@ -144,26 +144,7 @@
       $.ajax(imgUrl, {
         type: 'get',
         timeout: 10000,
-        success: ({marker, data}) => {
-          const imgs = data.map(item => {
-            const {
-              DateTime: {val: dateTime}, // 拍摄时间
-              ExposureTime: {val: exposureTime}, // 快门时间
-              FNumber: {val: fNumber}, // 光圈大小
-              FocalLength: {val: focalLength}, // 焦距
-              Model: {val: model}, // 机型
-              ISOSpeedRatings: {val: ISO}, // ISO
-            } = item
-            return {
-              dateTime,
-              exposureTime,
-              fNumber,
-              focalLength,
-              model,
-              ISO,
-              ...item
-            }
-          })
+        success: ({marker, data: imgs}) => {
           resolve({marker, imgs})
         },
         error: () => {
@@ -173,29 +154,51 @@
     })
   }
   // 加载图片
-  const loadImage = (imgs, callback) => {
-    const imgdefereds = [];
-    imgs.forEach(item => {
-      const dfd = $.Deferred();
-      const img = new Image(); //创建一个Image对象，实现图片的预下载
-      img.src = item.url;
-      if (img.complete) { // 如果图片已经存在于浏览器缓存，直接调用回调函数
-        dfd.resolve(img.src)
-        return // 直接返回，不用再处理onload事件
-      }
-      img.onload = function () { //图片下载完毕时异步调用callback函数。
-        dfd.resolve(img.src)
-      }
-      imgdefereds.push(dfd);
+  const loadImage = (url, callback) => {
+    const img = new Image() //创建一个Image对象，实现图片的预下载
+    img.src = url
+    if (img.complete) { // 如果图片已经存在于浏览器缓存，直接调用回调函数
+      callback()
+      return // 直接返回，不用再处理onload事件
+    }
+    img.onload = function () { //图片下载完毕时异步调用callback函数。
+      callback()
+    }
+  }
+  // 获取图片信息
+  const getImgInfo = (imgUrl) => {
+    const exifImgUrl = `${imgUrl}?exif`
+    return new Promise((resolve) => {
+      $.ajax(exifImgUrl, {
+        type: 'get',
+        timeout: 10000,
+        success: (data) => {
+          resolve(Exif(data))
+        },
+        error: () => {
+          console.log("请求失败")
+        }
+      })
     })
-    $.when.apply(null, imgdefereds).done(function () {
-      callback(imgs)
-    });
-  };
+  }
+
+  // Exif 实体
+  function Exif ({DateTime, ExposureTime, FNumber, FocalLength, Model, ISOSpeedRatings} = {}) {
+    return {
+      dateTime: DateTime.val, // 拍摄时间
+      exposureTime: ExposureTime.val, // 快门时间
+      fNumber: FNumber.val, // 光圈大小
+      focalLength: FocalLength.val, // 焦距
+      model: Model.val, // 机型
+      ISO: ISOSpeedRatings.val, // ISO
+    }
+  }
+
   // 渲染页面
   const render = (imgs) => {
-    imgs.forEach((item, index) => {
-      const {hash, dateTime, exposureTime, fNumber, focalLength, model, ISO, address, grade} = item
+    imgs.forEach(async (item) => {
+      const {hash, address, grade, url} = item
+      const {dateTime, exposureTime, fNumber, focalLength, model, ISO} = await getImgInfo(url)
       // 位置信息
       const position = address.replace(/-/g, '·')
       // 生成评级
@@ -258,6 +261,10 @@
     </ul>
   </section>`
       cId.append(imgItem)
+      // 当图片下载完了再设置到 DOM 上
+      loadImage(url, function () {
+        $(`#img${hash}`).css({'background-image': `url(${url})`, "opacity": 1})
+      })
     })
   }
   // 加载中
@@ -277,13 +284,9 @@
     const {marker, imgs} = await loadData(nMarker)
     isLoading = false
     renderLoading(isLoading)
+    if (!marker) return
     nMarker = marker
     render(imgs)
-    loadImage(imgs, function (imgList) {
-      imgList.forEach((item) => {
-        $(`#img${item.hash}`).css({'background-image': `url(${item.url})`, "opacity": 1})
-      })
-    })
   }
   // 初始化加载
   (async () => {
