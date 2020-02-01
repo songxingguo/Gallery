@@ -56,6 +56,8 @@
       background-size: cover;
     }
     .img {
+      width: inherit;
+      height: inherit;
       background-size: cover;
       -webkit-transition: opacity 1s ease-out;
       transition: opacity 1s ease-out;
@@ -170,10 +172,30 @@
       })
     })
   }
+  // 加载图片
+  const loadImage = (imgs, callback) => {
+    const imgdefereds = [];
+    imgs.forEach(item => {
+      const dfd = $.Deferred();
+      const img = new Image(); //创建一个Image对象，实现图片的预下载
+      img.src = item.url;
+      if (img.complete) { // 如果图片已经存在于浏览器缓存，直接调用回调函数
+        dfd.resolve(img.src)
+        return // 直接返回，不用再处理onload事件
+      }
+      img.onload = function () { //图片下载完毕时异步调用callback函数。
+        dfd.resolve(img.src)
+      }
+      imgdefereds.push(dfd);
+    })
+    $.when.apply(null, imgdefereds).done(function () {
+      callback(imgs)
+    });
+  };
   // 渲染页面
   const render = (imgs) => {
-    imgs.forEach(item => {
-      const {url, dateTime, exposureTime, fNumber, focalLength, model, ISO, address, grade} = item
+    imgs.forEach((item, index) => {
+      const {hash, dateTime, exposureTime, fNumber, focalLength, model, ISO, address, grade} = item
       // 位置信息
       const position = address.replace(/-/g, '·')
       // 生成评级
@@ -185,7 +207,7 @@
       const cId = $('#main')
       const imgItem = `<section class="img-item flex-column flex-all-center">
     <div class="img-box">
-       <div id="img${}" class="img"></div>
+       <div id="img${hash}" class="img"></div>
     </div>
     <ul class="desc-box flex-row flex-content-between">
       <li class="desc-item flex-column flex-items-center">
@@ -257,6 +279,11 @@
     renderLoading(isLoading)
     nMarker = marker
     render(imgs)
+    loadImage(imgs, function (imgList) {
+      imgList.forEach((item) => {
+        $(`#img${item.hash}`).css({'background-image': `url(${item.url})`, "opacity": 1})
+      })
+    })
   }
   // 初始化加载
   (async () => {
