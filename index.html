@@ -55,6 +55,12 @@
       background-position: center;
       background-size: cover;
     }
+    .img {
+      background-size: cover;
+      -webkit-transition: opacity 1s ease-out;
+      transition: opacity 1s ease-out;
+      opacity: 0;
+    }
     .desc-box {
       padding-top: 20px;
       margin: 0 20px;
@@ -130,7 +136,7 @@
 <script>
   // 加载数据
   const loadData = (marker) => {
-    const limit = 2
+    const limit = 5
     const imgUrl = `https://net.songxingguo.workers.dev/album/imgs?limit=${limit}&marker=${marker}`
     return new Promise((resolve) => {
       $.ajax(imgUrl, {
@@ -178,8 +184,9 @@
       }
       const cId = $('#main')
       const imgItem = `<section class="img-item flex-column flex-all-center">
-    <div class="img-box"
-         style="background-image: url(${url});"></div>
+    <div class="img-box">
+       <div id="img${}" class="img"></div>
+    </div>
     <ul class="desc-box flex-row flex-content-between">
       <li class="desc-item flex-column flex-items-center">
         <span class="desc-item__name">评级</span>
