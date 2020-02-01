@@ -90,6 +90,10 @@
     .icon_star {
       font-size: 18px;
     }
+    #loading {
+      position: fixed;
+      bottom: 10px;
+    }
     @media screen and (max-width: 750px) {
       
       .img-box {
@@ -124,14 +128,15 @@
 <script src="https://cdn.bootcss.com/moment.js/2.24.0/moment.min.js"></script>
 <!-- 页面逻辑 -->
 <script>
-  (async () => {
-    const imgUrl = `https://net.songxingguo.workers.dev/album/imgs`
-    // 获取图片信息
-    const imgs = await new Promise((resolve) => {
+  // 加载数据
+  const loadData = (marker) => {
+    const limit = 2
+    const imgUrl = `https://net.songxingguo.workers.dev/album/imgs?limit=${limit}&marker=${marker}`
+    return new Promise((resolve) => {
       $.ajax(imgUrl, {
         type: 'get',
         timeout: 10000,
-        success: (data) => {
+        success: ({marker, data}) => {
           const imgs = data.map(item => {
             const {
               DateTime: {val: dateTime}, // 拍摄时间
@@ -151,13 +156,16 @@
               ...item
             }
           })
-          resolve(imgs)
+          resolve({marker, imgs})
         },
         error: () => {
           console.log("请求失败")
         }
       })
     })
+  }
+  // 渲染页面
+  const render = (imgs) => {
     imgs.forEach(item => {
       const {url, dateTime, exposureTime, fNumber, focalLength, model, ISO, address, grade} = item
       // 位置信息
@@ -222,7 +230,40 @@
   </section>`
       cId.append(imgItem)
     })
+  }
+  // 加载中
+  const renderLoading = (isLoading) => {
+    if (isLoading) {
+      $('#main').append(`<div id="loading">加载中...</div>`)
+    } else {
+      $('#loading').remove()
+    }
+  }
+  let nMarker = ''; // 下次加载开始位置
+  let isLoading = false; // 是否正在加载
+  const beforeLoadData = async () => {
+    if (isLoading) return
+    isLoading = true
+    renderLoading(isLoading)
+    const {marker, imgs} = await loadData(nMarker)
+    isLoading = false
+    renderLoading(isLoading)
+    nMarker = marker
+    render(imgs)
+  }
+  // 初始化加载
+  (async () => {
+    await beforeLoadData()
   })()
+  // 上滑加载
+  $(window).scroll(async () => {
+    const scrollTop = $(this).scrollTop();    //滚动条距离顶部的高度
+    const scrollHeight = $(document).height();   //当前页面的总高度
+    const clientHeight = $(this).height();    //当前可视的页面高度
+    if (scrollTop + clientHeight >= scrollHeight - 500) {   //距离顶部+当前高度 >=文档总高度 即代表滑动到底部 注：-50 上拉加载更灵敏
+      await beforeLoadData()
+    }
+  });
 </script>
 </body>
 </html>
