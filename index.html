@@ -214,7 +214,8 @@
       const cId = $('#main')
       const imgItem = `<section class="img-item flex-column flex-all-center">
     <div id="img${hash}" class="img-box gradient-wrap">
-        <img src="${url}" class="img" crossorigin="anonymous" alt="">
+<!--        <img src="${url}" class="img" crossorigin="anonymous" alt="">-->
+        <div class="img"></div>
     </div>
     <ul class="desc-box flex-row flex-content-between">
       <li class="desc-item flex-column flex-items-center">
@@ -265,8 +266,9 @@
     </ul>
   </section>`
       cId.append(imgItem)
+      const wUrl = `${url}/watermark`
       // 当图片下载完了再设置到 DOM 上
-      loadImage(url, function () {
+      loadImage(wUrl, function () {
         // 添加渐变色
         const imgBox = $(`#img${hash}`)
         imgBox.ready(function () {
@@ -278,7 +280,7 @@
           imgBox.append(img)
           Grade(document.querySelectorAll('.gradient-wrap'))
         })
-        $(`#img${hash} .img`).css({'background-image': `url(${url})`, "opacity": 1})
+        $(`#img${hash} .img`).css({'background-image': `url(${wUrl})`, "opacity": 1})
       })
       // window.addEventListener('load', function () {
       //   Grade(document.querySelectorAll('.gradient-wrap'))
