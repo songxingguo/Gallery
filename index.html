@@ -202,7 +202,8 @@
   const render = (imgs) => {
     imgs.forEach(async (item) => {
       const {hash, address, grade, url} = item
-      const {dateTime, exposureTime, fNumber, focalLength, model, ISO} = await getImgInfo(url)
+      const wUrl = `${url}/watermark`
+      const {dateTime, exposureTime, fNumber, focalLength, model, ISO} = await getImgInfo(wUrl)
       // 位置信息
       const position = address.replace(/-/g, '·')
       // 生成评级
@@ -266,7 +267,6 @@
     </ul>
   </section>`
       cId.append(imgItem)
-      const wUrl = `${url}/watermark`
       // 当图片下载完了再设置到 DOM 上
       loadImage(wUrl, function () {
         // 添加渐变色
@@ -305,9 +305,9 @@
     const {marker, imgs} = await loadData(nMarker)
     isLoading = false
     renderLoading(isLoading)
-    if (!marker) return isLast = true
     nMarker = marker
     render(imgs)
+    if (!marker) return isLast = true
   }
   // 初始化加载
   (async () => {
