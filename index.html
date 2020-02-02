@@ -38,7 +38,7 @@
       box-shadow: 0 16px 30px 0, 0 6px 12px 0 rgba(0, 0, 0, .1);
       border-radius: 2px;
       overflow-y: hidden;
-      background-image: linear-gradient(135deg, #A0FE65 10%, #FA016D 100%);
+      /*background-image: linear-gradient(135deg, #A0FE65 10%, #FA016D 100%);*/
       transition: -webkit-box-shadow 1s;
       transition: box-shadow 1s;
       transition: box-shadow 1s, -webkit-box-shadow 1s;
@@ -134,6 +134,8 @@
 <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
 <!-- 时间格式库 -->
 <script src="https://cdn.bootcss.com/moment.js/2.24.0/moment.min.js"></script>
+<!--渐变色获取-->
+<script src="https://cdn.qiniu.songxingguo.com/js/grade.js"></script>
 <!-- 页面逻辑 -->
 <script>
   // 加载数据
@@ -209,8 +211,8 @@
       }
       const cId = $('#main')
       const imgItem = `<section class="img-item flex-column flex-all-center">
-    <div class="img-box">
-       <div id="img${hash}" class="img"></div>
+    <div id="img${hash}" class="img-box gradient-wrap">
+        <img src="${url}" class="img" crossorigin="anonymous" alt="">
     </div>
     <ul class="desc-box flex-row flex-content-between">
       <li class="desc-item flex-column flex-items-center">
@@ -263,8 +265,22 @@
       cId.append(imgItem)
       // 当图片下载完了再设置到 DOM 上
       loadImage(url, function () {
-        $(`#img${hash}`).css({'background-image': `url(${url})`, "opacity": 1})
+        // 添加渐变色
+        const imgBox = $(`#img${hash}`)
+        imgBox.ready(function () {
+          const img = $('img', {
+            class: "img",
+            src: url,
+            crossorigin: "anonymous"
+          })
+          imgBox.append(img)
+          Grade(document.querySelectorAll('.gradient-wrap'))
+        })
+        $(`#img${hash} .img`).css({'background-image': `url(${url})`, "opacity": 1})
       })
+      // window.addEventListener('load', function () {
+      //   Grade(document.querySelectorAll('.gradient-wrap'))
+      // })
     })
   }
   // 加载中
@@ -301,6 +317,11 @@
       await beforeLoadData()
     }
   });
+</script>
+<script type="text/javascript">
+  window.addEventListener('load', function () {
+    Grade(document.querySelectorAll('.gradient-wrap'))
+  })
 </script>
 </body>
 </html>
