@@ -216,7 +216,7 @@
       const imgItem = `<section class="img-item flex-column flex-all-center">
     <div id="img${hash}" class="img-box gradient-wrap">
 <!--        <img src="${url}" class="img" crossorigin="anonymous" alt="">-->
-        <div class="img"></div>
+<!--        <div class="img"></div>-->
     </div>
     <ul class="desc-box flex-row flex-content-between">
       <li class="desc-item flex-column flex-items-center">
@@ -271,16 +271,11 @@
       loadImage(wUrl, function () {
         // 添加渐变色
         const imgBox = $(`#img${hash}`)
-        imgBox.ready(function () {
-          const img = $('img', {
-            class: "img",
-            src: url,
-            crossorigin: "anonymous"
-          })
-          imgBox.append(img)
-          Grade(document.querySelectorAll('.gradient-wrap'))
-        })
+        imgBox.append(`<img src="${wUrl}" class="img" crossOrigin="anonymous" alt="">`)
         $(`#img${hash} .img`).css({'background-image': `url(${wUrl})`, "opacity": 1})
+        setTimeout(function () {
+          Grade(document.querySelector(`#img${hash}`))
+        }, 200)
       })
       // window.addEventListener('load', function () {
       //   Grade(document.querySelectorAll('.gradient-wrap'))
