@@ -161,12 +161,15 @@
   const loadImage = (url, callback) => {
     const img = new Image() //创建一个Image对象，实现图片的预下载
     img.src = url
+    img.setAttribute('class', 'img')
+    img.setAttribute('crossOrigin', 'anonymous')
+    img.style.opacity = 1
     if (img.complete) { // 如果图片已经存在于浏览器缓存，直接调用回调函数
-      callback()
+      callback(img)
       return // 直接返回，不用再处理onload事件
     }
     img.onload = function () { //图片下载完毕时异步调用callback函数。
-      callback()
+      callback(img)
     }
   }
   // 获取图片信息
@@ -268,11 +271,10 @@
   </section>`
       cId.append(imgItem)
       // 当图片下载完了再设置到 DOM 上
-      loadImage(wUrl, function () {
+      loadImage(wUrl, function (img) {
         // 添加渐变色
         const imgBox = $(`#img${hash}`)
-        imgBox.append(`<img src="${wUrl}" class="img" crossOrigin="anonymous" alt="">`)
-        $(`#img${hash} .img`).css({'background-image': `url(${wUrl})`, "opacity": 1})
+        imgBox.append(img)
         setTimeout(function () {
           Grade(document.querySelector(`#img${hash}`))
         }, 200)
