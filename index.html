@@ -189,6 +189,18 @@
     })
   }
 
+  // 批量获取图片信息
+  const batchGetImgInfo = (imgs) => {
+    return Promise.all(imgs.map(async (img) => {
+      const {url} = img
+      const wUrl = `${url}/watermark`
+      const imgInfo = await getImgInfo(wUrl)
+      return new Promise(resolve => {
+        resolve(Object.assign(img, {exif: imgInfo}))
+      })
+    }))
+  }
+
   // Exif 实体
   function Exif ({DateTime, ExposureTime, FNumber, FocalLength, Model, ISOSpeedRatings} = {}) {
     return {
@@ -204,9 +216,9 @@
   // 渲染页面
   const render = (imgs) => {
     imgs.forEach(async (item) => {
-      const {hash, address, grade, url} = item
+      const {hash, address, grade, url, img, exif} = item
       const wUrl = `${url}/watermark`
-      const {dateTime, exposureTime, fNumber, focalLength, model, ISO} = await getImgInfo(wUrl)
+      const {dateTime, exposureTime, fNumber, focalLength, model, ISO} = exif
       // 位置信息
       const position = address.replace(/-/g, '·')
       // 生成评级
@@ -303,6 +315,7 @@
     isLoading = false
     renderLoading(isLoading)
     nMarker = marker
+    await batchGetImgInfo(imgs)
     render(imgs)
     if (!marker) return isLast = true
   }
