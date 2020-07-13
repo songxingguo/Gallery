@@ -217,7 +217,6 @@
   const render = (imgs) => {
     imgs.forEach(async (item) => {
       const {hash, address, grade, url, img, exif} = item
-      const wUrl = `${url}/watermark`
       const {dateTime, exposureTime, fNumber, focalLength, model, ISO} = exif
       // 位置信息
       const position = address.replace(/-/g, '·')
@@ -283,6 +282,7 @@
   </section>`
       cId.append(imgItem)
       // 当图片下载完了再设置到 DOM 上
+      const wUrl = `${url}/tiny`
       loadImage(wUrl, function (img) {
         // 添加渐变色
         const imgBox = $(`#img${hash}`)
