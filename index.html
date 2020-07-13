@@ -172,6 +172,20 @@
       callback(img)
     }
   }
+
+  // 批量加载图片
+  const batchLoadData = (imgs) => {
+    return Promise.all(imgs.map((img) => {
+      const {url} = img
+      const wUrl = `${url}/watermark`
+      return new Promise((resolve) => {
+        loadImage(wUrl, function (imgObj) {
+          resolve(Object.assign(img, {img: imgObj}))
+        })
+      })
+    }))
+  }
+
   // 获取图片信息
   const getImgInfo = (imgUrl) => {
     const exifImgUrl = `${imgUrl}?exif`
@@ -204,7 +218,7 @@
   // 渲染页面
   const render = (imgs) => {
     imgs.forEach(async (item) => {
-      const {hash, address, grade, url} = item
+      const {hash, address, grade, url, img} = item
       const wUrl = `${url}/watermark`
       const {dateTime, exposureTime, fNumber, focalLength, model, ISO} = await getImgInfo(wUrl)
       // 位置信息
@@ -270,15 +284,13 @@
     </ul>
   </section>`
       cId.append(imgItem)
+      // 添加渐变色
+      const imgBox = $(`#img${hash}`)
       // 当图片下载完了再设置到 DOM 上
-      loadImage(wUrl, function (img) {
-        // 添加渐变色
-        const imgBox = $(`#img${hash}`)
-        imgBox.append(img)
-        setTimeout(function () {
-          Grade(document.querySelector(`#img${hash}`))
-        }, 200)
-      })
+      imgBox.append(img)
+      setTimeout(function () {
+        Grade(document.querySelector(`#img${hash}`))
+      }, 200)
       // window.addEventListener('load', function () {
       //   Grade(document.querySelectorAll('.gradient-wrap'))
       // })
@@ -303,6 +315,7 @@
     isLoading = false
     renderLoading(isLoading)
     nMarker = marker
+    await batchLoadData(imgs)
     render(imgs)
     if (!marker) return isLast = true
   }
