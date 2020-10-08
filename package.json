@@ -8,6 +8,7 @@
     "pandora-nodejs-sdk": "^0.0.1"
   },
   "devDependencies": {
+    "copy-webpack-plugin": "^6.2.0",
     "html-webpack-plugin": "^4.5.0",
     "webpack": "^4.44.2",
     "webpack-cli": "^3.3.12"
