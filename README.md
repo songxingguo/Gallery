@@ -3,4 +3,4 @@
 
 手机上查看
 -----------------------
- ![相册](./images/icon/album.png)
+ ![相册](src/images/icon/album.png)

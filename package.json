@@ -1,0 +1,29 @@
+{
+  "name": "album",
+  "version": "1.0.0",
+  "description": "相册画廊",
+  "main": "webpack.config.js",
+  "dependencies": {
+    "npm": "^6.13.6",
+    "pandora-nodejs-sdk": "^0.0.1"
+  },
+  "devDependencies": {
+    "html-webpack-plugin": "^4.5.0",
+    "webpack": "^4.44.2",
+    "webpack-cli": "^3.3.12"
+  },
+  "scripts": {
+    "start": "webpack --mode=development",
+    "build": "webpack --mode=production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/songxingguo/album.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/songxingguo/album/issues"
+  },
+  "homepage": "https://github.com/songxingguo/album#readme"
+}
